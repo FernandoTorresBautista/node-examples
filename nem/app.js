@@ -3,13 +3,13 @@ const mongoose = require('mongoose');
 const Item = require('./models/items');
 
 const app = express();
-require('dotenv').config(); // tomar la configuracion del archivo .env
+require('dotenv').config(); 
 
-// const mongodb = process.env.DB_MONGO;
+app.use(express.urlencoded({extended: true}));
+
 mongoose.connect(process.env.DB_MONGO, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-    //useCreateIndex: true
   })
   .then(()=>{ console.log('Connected')})
   .catch(err => console.log(err));
@@ -17,35 +17,8 @@ mongoose.connect(process.env.DB_MONGO, {
 app.set('view engine', 'ejs');
 app.listen(process.env.PORT);
 
-// app.get('/create-item', (req, res) => {
-//   const item = new Item({
-//     name: 'phone',
-//     price: 1000
-//   });
-//   item.save().then(result => res.send(result));
-// });
-
-// app.get('/get-items', (req, res) => {
-//   Item.find()
-//     .then(result => res.send(result))
-//     .catch(err => console.log(err));
-// });
-
-// app.get('/get-item', (req, res) => {
-//   Item.findById('61301d33e8a133d785cc7cd0')
-//     .then(result => res.send(result))
-//     .catch(err => console.log(err));
-// });
 
 app.get('/', (req, res) => {
-  //res.send('<p>Home page</p>')
-  //res.sendFile('./views/index.html', {root:__dirname});
-  // const items = [
-  //   {name: 'mobile phone', price: 1000},
-  //   {name: 'book', price: 30},
-  //   {name: 'computer', price: 2000},
-  // ];
-  // res.render('index', {items});
   res.redirect('/get-items');
 });
 
@@ -58,12 +31,17 @@ app.get('/get-items', (req, res) => {
 });
 
 app.get('/add-item', (req, res) => {
-  //res.send('<h1>Add items</h1>')
-  //res.sendFile('./views/add-item.html', {root:__dirname});
   res.render('add-item');
 });
 
+app.post('/items', (req, res) => {
+  //console.log(req.body);
+  const item = Item(req.body);
+  item.save().then( ()=> {
+    res.redirect('/items')
+  }).catch(err => console.log(err));
+});
+
 app.use((req, res)=>{
-  //res.sendFile('./views/error.html', {root:__dirname})
   res.render('error')
 });
