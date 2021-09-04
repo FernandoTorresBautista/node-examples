@@ -38,8 +38,31 @@ app.post('/items', (req, res) => {
   //console.log(req.body);
   const item = Item(req.body);
   item.save().then( ()=> {
-    res.redirect('/items')
+    res.redirect('/get-items')
   }).catch(err => console.log(err));
+});
+
+app.get('/items/:id', (req, res) => {
+  // console.log(req.params);
+  const id = req.params.id;
+  Item.findById(id).then(result => {
+    console.log("result", result);
+    res.render('item-detail', {item:result})
+  });
+});
+
+app.delete('/items/:id', (req, res) => {
+  const id = req.params.id;
+  Item.findByIdAndDelete(id).then(result => {
+    res.json({redirect:'/get-items'})
+  });
+});
+
+app.put('/items/:id', (req, res) => {
+  const id = req.params.id;
+  Item.findByIdAndUpdate(id, req.body).then(result => {
+    res.json({msg:'Updated Successfuly'})
+  });
 });
 
 app.use((req, res)=>{
