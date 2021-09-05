@@ -1,5 +1,5 @@
 import axios from 'axios';
-const url = 'http://localhost:5000/todos';
+const url = 'http://localhost:5000/todos'; // change on production api & npm run build 
 
 export const readTodos = ()=>axios.get(url); 
 export const createTodo = newTodo => axios.post(url, newTodo); 
