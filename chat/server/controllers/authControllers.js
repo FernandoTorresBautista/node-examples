@@ -4,7 +4,6 @@ const alertError = (err)=>{
   let errors = {name: '', email: '', password: ''};
   // console.log(`error message: ${err.message}`);
   // console.log(`error code: ${err.code}`);
-  // console.log(err);
   if (err.code === 11000) {
     errors.email = 'This email already registered';
     return errors;
@@ -14,7 +13,6 @@ const alertError = (err)=>{
       errors[properties.path] = properties.message;
     })
   }
-  // console.log(errors);
   return errors;
 }
 

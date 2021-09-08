@@ -5,6 +5,8 @@ import { UserContext } from './UserContext';
 import Chat from './components/chat/Chat';
 import Home from './components/home/Home';
 import Navbar from './components/layout/Navbar';
+import Login from './components/auth/Login';
+import Signup from './components/auth/Signup';
 function App() {
   const [user, setUser] = useState(null)
   return (
@@ -15,6 +17,8 @@ function App() {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/chat/:room_id/:room_name" component={Chat} />
+            <Route path="/signup" component={Signup} />
+            <Route path="/login" component={Login} />
           </Switch>
         </UserContext.Provider>
       </div>
