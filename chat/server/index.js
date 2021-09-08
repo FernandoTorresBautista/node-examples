@@ -1,8 +1,18 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
+const cookieParse = require('cookie-parser');
+const corsOption = {
+  origin:'http://localhost:3000/',
+  credential:true,
+  optionSucessStatus:200
+}
+app.use(cors(corsOption));
 app.use(express.json());
 app.use(authRoutes);
+app.use(cookieParse());
+
 const http = require('http').createServer(app);
 const socketio = require("socket.io");
 const mongoose = require('mongoose');
@@ -23,12 +33,26 @@ mongoose.connect(mongoDB)
 const Room = require('./models/Room.js');
 const Message = require('./models/Message.js');
 
+app.get('/set-cookie', (req, res)=> {
+  res.cookie('username', 'Fer');
+  //res.cookie('isAuthenticated', true, {httpOnly:true});
+  //res.cookie('isAuthenticated', true, {secure:true});
+  res.cookie('isAuthenticated', true, {maxAge:24 * 60 * 60}); // deleted automatically
+  res.send('cookie are set');
+});
+
+app.get('/get-cookie', (req, res)=> {
+  const cookies = req.cookies;
+  console.log(cookies);
+  res.json(cookies);
+});
+
 io.on('connection', (socket) => {
   console.log(socket.id);
   Room.find().then(result => {
     console.log('output-rooms', result);
     socket.emit('output-rooms', result);
-  })
+  });
   socket.on('create-room', name=>{
     console.log('Then room name received is: ', name);
     const room = new Room({name});
