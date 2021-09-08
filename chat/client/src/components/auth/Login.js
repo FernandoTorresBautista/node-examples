@@ -3,7 +3,7 @@ import { UserContext } from '../../UserContext';
 import { Redirect } from 'react-router';
 
 const Login = () => {
-  const {user,setUser} = useContext(UserContext)
+  const {user,setUser} = useContext(UserContext);
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
   const [emailError,setEmailError] = useState('');
@@ -38,6 +38,7 @@ const Login = () => {
   }
   return (
     <div className="row">
+      <h2>Login</h2>
       <form className="col s12" onSubmit={submitHandler}>
         <div className="row">
           <div className="input-field col s12">
