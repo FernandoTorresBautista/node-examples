@@ -10,8 +10,8 @@ const corsOption = {
 }
 app.use(cors(corsOption));
 app.use(express.json());
-app.use(authRoutes);
 app.use(cookieParse());
+app.use(authRoutes);
 
 const http = require('http').createServer(app);
 const socketio = require("socket.io");

@@ -79,7 +79,7 @@ const Signup = () => {
             <label htmlFor="password">Password</label>
           </div>
         </div>
-        <button className="btn">Signup</button>
+        <button className="btn">Sign up</button>
       </form>
     </div>
   )
