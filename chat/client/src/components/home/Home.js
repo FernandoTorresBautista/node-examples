@@ -6,33 +6,40 @@ import io from 'socket.io-client';
 let socket;
 const Home = () => {
   const ENDPT = 'http://localhost:5000';
+  const {user,setUser} = useContext(UserContext)
+  const [room, setRoom] = useState('');
+  const [rooms, setRooms] = useState([]);
   useEffect(() => {
     socket = io(ENDPT);
     return () => {
-      socket.emit('remove');
+      // para enviarlo al back end no permite el disconnect es reservado
+      // socket.emit('disconnect'); 
+      socket.emit('remove'); 
       // socket.disconnect(); 
       socket.off();
     }
   }, [ENDPT])
-  const {user,setUser} = useContext(UserContext)
-  const [room, setRoom] = useState('');
-  const [rooms, setRooms] = useState([]);
+  useEffect(() => {
+    socket.on('output-rooms', rooms=>{
+      setRooms(rooms)
+    })
+  }, [])
+  useEffect(() => {
+    socket.on('room-created', room=>{
+      setRooms([...rooms, room])
+    })
+  }, [rooms])
+  useEffect(() => {
+    console.log("rooms: ", rooms);
+  }, [rooms])
+
   const handleSubmit = e=>{
     e.preventDefault();
     socket.emit('create-room', room);
     console.log(room);
     setRoom('');
   }
-  // const rooms =[
-  //   {
-  //     name: 'room1',
-  //     _id:'123'
-  //   },
-  //   {
-  //     name: 'room2',
-  //     _id:'456'
-  //   }
-  // ]
+
   const setAsJhon = ()=>{
     const jhon = {
       name:'Jhon',

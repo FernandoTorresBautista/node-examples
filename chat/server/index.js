@@ -17,9 +17,14 @@ mongoose.connect(mongoDB)
   .catch(error => console.log(error))
 
 const Room = require('./models/Room.js');
+const Message = require('./models/Message.js');
 
 io.on('connection', (socket) => {
   console.log(socket.id);
+  Room.find().then(result => {
+    console.log('output-rooms', result);
+    socket.emit('output-rooms', result);
+  })
   socket.on('create-room', name=>{
     console.log('Then room name received is: ', name);
     const room = new Room({name});
@@ -49,8 +54,11 @@ io.on('connection', (socket) => {
       text:message
     }
     console.log('message: ', msgToStore);
-    io.to(room_id).emit('message', msgToStore);
-    callback();
+    const msg = new Message(msgToStore)
+    msg.save().then(result =>{
+      io.to(room_id).emit('message', result);
+      callback();
+    })
   });
   socket.on('remove', ()=>{
     const user = removeUser(socket.id);
