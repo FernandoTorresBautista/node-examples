@@ -1,4 +1,8 @@
-const app = require('express')();
+const express = require('express');
+const app = express();
+const authRoutes = require('./routes/authRoutes');
+app.use(express.json());
+app.use(authRoutes);
 const http = require('http').createServer(app);
 const socketio = require("socket.io");
 const mongoose = require('mongoose');
